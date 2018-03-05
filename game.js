@@ -22,7 +22,11 @@ function drawSnake() {
     for (let i=0; i<snakeBodyParts.length; i++) {
         cx.fillStyle = "#282833";
         cx.fillRect(snakeBodyParts[i].x*step, snakeBodyParts[i].y*step,25,25);
+        cx.fillStyle = "#191921";
+        cx.fillRect(snakeBodyParts[snakeBodyParts.length-1].x*step,
+                   snakeBodyParts[snakeBodyParts.length-1].y*step, 25,25);
     };
+        
     moveSnake();  
 };
 
