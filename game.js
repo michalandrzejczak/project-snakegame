@@ -23,12 +23,12 @@ function drawSnake() {
         cx.fillStyle = "#282833";
         cx.fillRect(snakeBodyParts[i].x*step, snakeBodyParts[i].y*step,25,25);
     };
-   moveSnake(); 
+    moveSnake();  
 };
 
 
 function directSnake() {
-    window.addEventListener("keydown", event => {
+        window.addEventListener("keydown", event => {
         switch (event.keyCode) {
         case 37:
             if (direction != "right")
@@ -46,8 +46,8 @@ function directSnake() {
             if (direction != "up")
             direction = "down";
             break;
-        }
-})};
+        }})
+};
 
 function moveSnake() {
     let posX = snakeBodyParts[snakeBodyParts.length-1].x;
@@ -76,13 +76,25 @@ function moveSnake() {
         prevposY = posY;
     };
 };
+let paused = true;
 
 function animateSnake() {
     directSnake();
-    setInterval(function() {drawSnake();}, 150)
+    
+    setInterval(function() {
+        if (paused == false) 
+        drawSnake()
+        else;
+    }, 150)
 };
 
 animateSnake();
 
-
+function pause() {
+    window.addEventListener("keydown", event =>  {
+        if (event.keyCode == 32 && paused == true) {paused = false;}
+        else if (event.keyCode == 32 && paused == false) {paused = true;};  
+    });
+};
+pause();
  
