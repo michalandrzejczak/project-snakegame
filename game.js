@@ -3,17 +3,29 @@ let cx = canvas.getContext("2d");
 
 let step = 25;
 
-let startSnakePosX = 0, startSnakePosY = 0, prevposX, prevposY;
-
-let snakeHead = function(posX, posY) {
-cx.fillStyle = "#282833";
-cx.fillRect(posX,posY,25,25);
-prevposX = posX;
-prevposY = posY;
-} 
-snakeHead(startSnakePosX, startSnakePosY);
+let startSnakePosX = step, startSnakePosY = step, prevposX, prevposY;
+let startSnakeLength = 6;
+let snakeBodyParts = [];
+let snakeLength = startSnakeLength;
 
 let direction = "right";
+
+function initSnake() {
+    for (let i=0; i<startSnakeLength; i++) {
+        snakeBodyParts.push({x: i, y: 0});
+    };
+};
+initSnake();
+
+function drawSnake() {
+    cx.clearRect(0, 0, canvas.width, canvas.height);
+    for (let i=0; i<snakeBodyParts.length; i++) {
+        cx.fillStyle = "#282833";
+        cx.fillRect(snakeBodyParts[i].x*step, snakeBodyParts[i].y*step,25,25);
+    };
+   moveSnake(); 
+};
+
 
 function directSnake() {
     window.addEventListener("keydown", event => {
@@ -36,26 +48,41 @@ function directSnake() {
             break;
         }
 })};
-directSnake();
+
 function moveSnake() {
-    directSnake();
-    setInterval(function() {
-        cx.clearRect(0, 0, canvas.width, canvas.height);
+    let posX = snakeBodyParts[snakeBodyParts.length-1].x;
+    let posY = snakeBodyParts[snakeBodyParts.length-1].y;
+    let prevposX = posX, prevposY = posY;
         switch (direction) {
         case "right":
-            snakeHead(prevposX+step, prevposY);
+            snakeBodyParts[snakeBodyParts.length-1].x++;
             break;
         case "left":
-            snakeHead(prevposX-step, prevposY);
+            snakeBodyParts[snakeBodyParts.length-1].x--;
             break;
         case "up":
-            snakeHead(prevposX, prevposY-step);
+            snakeBodyParts[snakeBodyParts.length-1].y--;
             break;
         case "down":
-            snakeHead(prevposX, prevposY+step); 
+            snakeBodyParts[snakeBodyParts.length-1].y++;
             break;
-        }
-    }, 150);
+        };
+    for (let i=snakeBodyParts.length-2; i>=0; i--) {
+        posX = snakeBodyParts[i].x;
+        posY = snakeBodyParts[i].y;
+        snakeBodyParts[i].x = prevposX;
+        snakeBodyParts[i].y = prevposY;
+        prevposX = posX;
+        prevposY = posY;
+    };
 };
-moveSnake();
+
+function animateSnake() {
+    directSnake();
+    setInterval(function() {drawSnake();}, 150)
+};
+
+animateSnake();
+
+
  
